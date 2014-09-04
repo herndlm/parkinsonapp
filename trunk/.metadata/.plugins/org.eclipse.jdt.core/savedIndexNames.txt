@@ -1,6 +1,0 @@
-INDEX VERSION 1.127+/home/martin/parkinsonapp/trunk/.metadata/.plugins/org.eclipse.jdt.core
-1377251446.index
-2590722482.index
-3861178570.index
-1303641532.index
-2394106200.index
