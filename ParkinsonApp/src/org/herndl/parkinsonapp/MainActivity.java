@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 	
 	/**
@@ -144,8 +145,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         if (id == R.id.action_about) {
             return true;
         }
-        else if (id == R.id.action_search) {
-        	Log.v(this.getClass().getName(), "pressed search");
+        else if (id == R.id.action_about) {
+        	Log.v(this.getClass().getName(), "pressed about");
         	return true;
         }
         return super.onOptionsItemSelected(item);

@@ -51,13 +51,13 @@ public class MedReminderFragment extends Fragment {
             	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             	// Add the buttons
             	builder.setTitle(String.format("Soll die Erinnerung an %s wirklich gelöscht werden?", med.name))
-                       .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                       .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             	           public void onClick(DialogInterface dialog, int id) {
             	        	   // remove med from list and DB
             	        	   removeMedItem(position);
             	           }
             	       })
-            	       .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            	       .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             	           public void onClick(DialogInterface dialog, int id) {
             	        	   // do nothing
             	           }
@@ -151,7 +151,7 @@ public class MedReminderFragment extends Fragment {
             builder.setView(view);
             
             builder.setTitle("Reminder Add")
-                   .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int id) {
                     	   // create new med entity with user input
                     	   EditText med_name = (EditText) view.findViewById(R.id.add_med_name);
@@ -162,7 +162,7 @@ public class MedReminderFragment extends Fragment {
                     	   addMedItem(med);
                        }
                    })
-                   .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                   .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                        public void onClick(DialogInterface dialog, int id) {
                            // do nothing
                        }

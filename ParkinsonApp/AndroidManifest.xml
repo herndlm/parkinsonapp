@@ -6,14 +6,14 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:name="com.orm.SugarApp"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Custom" >
+        android:theme="@style/Theme.AppCompat.Light" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -22,13 +22,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MedReminderAddActivity"
-            android:label="@string/title_activity_display_message" >
-        	<meta-data
-            	android:name="android.support.PARENT_ACTIVITY"
-            	android:value="org.herndl.parkinsonapp.MainActivity" />
         </activity>
         <meta-data android:name="DATABASE" android:value="parkinson.db" />
 		<meta-data android:name="VERSION" android:value="1" />

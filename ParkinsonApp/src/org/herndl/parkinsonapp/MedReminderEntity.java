@@ -2,7 +2,7 @@ package org.herndl.parkinsonapp;
 
 import com.orm.SugarRecord;
 
-public class MedReminderEntity extends SugarRecord {
+public class MedReminderEntity extends SugarRecord<MedReminderEntity> {
 	
 	public String name;
 	public Integer dose;
