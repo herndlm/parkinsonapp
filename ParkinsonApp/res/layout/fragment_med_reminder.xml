@@ -4,11 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+    <ListView
+        android:id="@+id/med_reminder_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:layout_weight="1" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/med_reminder_button_add"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_weight="0"
+        android:paddingBottom="@dimen/button_padding_default"
+        android:paddingLeft="@dimen/button_padding_default"
+        android:paddingRight="@dimen/button_padding_default"
+        android:paddingTop="@dimen/button_padding_default"
+        android:text="@string/button_add" />
 
 </LinearLayout>

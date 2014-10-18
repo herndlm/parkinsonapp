@@ -11,6 +11,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
+        android:name="com.orm.SugarApp"
         android:label="@string/app_name"
         android:theme="@style/Theme.Custom" >
         <activity
@@ -23,12 +24,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DisplayMessageActivity"
+            android:name=".MedReminderAddActivity"
             android:label="@string/title_activity_display_message" >
         	<meta-data
             	android:name="android.support.PARENT_ACTIVITY"
             	android:value="org.herndl.parkinsonapp.MainActivity" />
         </activity>
+        <meta-data android:name="DATABASE" android:value="parkinson.db" />
+		<meta-data android:name="VERSION" android:value="1" />
+		<meta-data android:name="QUERY_LOG" android:value="true" />
+		<meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="org.herndl.parkinson" />
     </application>
-
 </manifest>
