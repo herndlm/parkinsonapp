@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ContentDescription" severity="ignore">
+        <ignore path="res/layout/abc_activity_chooser_view_include.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view_include.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+        <ignore path="res/layout/abc_list_menu_item_icon.xml" />
+        <ignore path="res/layout/abc_list_menu_item_icon.xml" />
+        <ignore path="res/layout/abc_search_dropdown_item_icons_2line.xml" />
+        <ignore path="res/layout/abc_search_dropdown_item_icons_2line.xml" />
+    </issue>
+    <issue id="DuplicateIds" severity="ignore">
+        <ignore path="res/layout/abc_activity_chooser_view_include.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view_include.xml" />
+    </issue>
+    <issue id="InefficientWeight" severity="ignore">
+        <ignore path="res/layout/abc_search_view.xml" />
+    </issue>
+    <issue id="MissingTranslation" severity="ignore">
+        <ignore path="res/values/strings.xml" />
+        <ignore path="res/values/strings.xml" />
+    </issue>
+    <issue id="NestedWeights" severity="ignore">
+        <ignore path="res/layout/abc_search_view.xml" />
+    </issue>
+    <issue id="NewApi" severity="ignore">
+        <ignore path="res/values-v11/themes_base.xml" />
+        <ignore path="res/values-v11/themes_base.xml" />
+        <ignore path="res/values-v14/themes_base.xml" />
+        <ignore path="res/values-v14/themes_base.xml" />
+    </issue>
+    <issue id="Overdraw" severity="ignore">
+        <ignore path="res/layout/abc_action_bar_up_container.xml" />
+        <ignore path="res/layout/abc_expanded_menu_layout.xml" />
+    </issue>
+    <issue id="RtlHardcoded" severity="ignore">
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+        <ignore path="res/layout/abc_list_menu_item_icon.xml" />
+        <ignore path="res/layout/abc_list_menu_item_layout.xml" />
+        <ignore path="res/layout/abc_search_view.xml" />
+    </issue>
+    <issue id="TypographyEllipsis" severity="ignore">
+        <ignore path="res/values-ne-rNP/strings.xml" />
+    </issue>
+    <issue id="UnusedAttribute" severity="ignore">
+        <ignore path="res/color/abc_background_cache_hint_selector_material_dark.xml" />
+        <ignore path="res/color/abc_background_cache_hint_selector_material_light.xml" />
+        <ignore path="res/drawable/abc_cab_background_top_material.xml" />
+        <ignore path="res/drawable/abc_edit_text_material.xml" />
+        <ignore path="res/drawable/abc_textfield_search_material.xml" />
+        <ignore path="res/layout/abc_screen_toolbar.xml" />
+        <ignore path="res/layout/abc_search_view.xml" />
+    </issue>
+    <issue id="UnusedResources" severity="ignore">
+        <ignore path="res/anim/abc_fade_in.xml" />
+        <ignore path="res/anim/abc_fade_out.xml" />
+        <ignore path="res/anim/abc_slide_in_bottom.xml" />
+        <ignore path="res/anim/abc_slide_in_top.xml" />
+        <ignore path="res/anim/abc_slide_out_bottom.xml" />
+        <ignore path="res/anim/abc_slide_out_top.xml" />
+        <ignore path="res/layout/abc_action_bar_title_item.xml" />
+        <ignore path="res/layout/abc_action_bar_up_container.xml" />
+        <ignore path="res/layout/abc_action_bar_view_list_nav_layout.xml" />
+        <ignore path="res/layout/abc_action_menu_item_layout.xml" />
+        <ignore path="res/layout/abc_action_menu_layout.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view.xml" />
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+        <ignore path="res/layout/abc_expanded_menu_layout.xml" />
+        <ignore path="res/layout/abc_list_menu_item_checkbox.xml" />
+        <ignore path="res/layout/abc_list_menu_item_icon.xml" />
+        <ignore path="res/layout/abc_list_menu_item_layout.xml" />
+        <ignore path="res/layout/abc_list_menu_item_radio.xml" />
+        <ignore path="res/layout/abc_popup_menu_item_layout.xml" />
+        <ignore path="res/layout/abc_screen_simple.xml" />
+        <ignore path="res/layout/abc_screen_simple_overlay_action_mode.xml" />
+        <ignore path="res/layout/abc_screen_toolbar.xml" />
+        <ignore path="res/layout/support_simple_spinner_dropdown_item.xml" />
+        <ignore path="res/values/bools.xml" />
+        <ignore path="res/values/colors.xml" />
+        <ignore path="res/values/colors_material.xml" />
+        <ignore path="res/values/config.xml" />
+        <ignore path="res/values/dimens.xml" />
+        <ignore path="res/values/dimens_material.xml" />
+        <ignore path="res/values/strings.xml" />
+    </issue>
+    <issue id="UseCompoundDrawables" severity="ignore">
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+    </issue>
+    <issue id="UselessParent" severity="ignore">
+        <ignore path="res/layout/abc_activity_chooser_view_list_item.xml" />
+    </issue>
+</lint>
