@@ -2,14 +2,7 @@
 <resources>
 
     <string name="app_name">ParkinsonApp</string>
-    <string name="edit_message">Enter a message</string>
     <string name="button_add">Add</string>
     <string name="action_about">About</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_display_message">My cool Message</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_search">Search</string>
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
 
 </resources>
