@@ -30,6 +30,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        Log.d("MainActivity", "onCreate");
+        AlarmReceiver alarmReceiver = new AlarmReceiver();
+        alarmReceiver.setAlarm(this);
+        
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
         mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
