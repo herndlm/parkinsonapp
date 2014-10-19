@@ -1,4 +1,4 @@
-package org.herndl.parkinsonapp;
+package org.herndl.parkinsonapp.medreminder;
 
 import java.util.Calendar;
 import java.util.Comparator;

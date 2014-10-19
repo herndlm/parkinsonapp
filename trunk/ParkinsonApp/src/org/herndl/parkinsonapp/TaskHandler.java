@@ -1,5 +1,7 @@
 package org.herndl.parkinsonapp;
 
+import org.herndl.parkinsonapp.medreminder.MedReminderEntity;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;

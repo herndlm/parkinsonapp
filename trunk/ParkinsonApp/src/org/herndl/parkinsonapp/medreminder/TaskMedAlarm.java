@@ -1,6 +1,8 @@
-package org.herndl.parkinsonapp;
+package org.herndl.parkinsonapp.medreminder;
 
 import java.util.Calendar;
+
+import org.herndl.parkinsonapp.TaskNotifyService;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

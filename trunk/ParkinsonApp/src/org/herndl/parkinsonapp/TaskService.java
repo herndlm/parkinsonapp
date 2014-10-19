@@ -2,6 +2,9 @@ package org.herndl.parkinsonapp;
 
 import java.util.List;
 
+import org.herndl.parkinsonapp.medreminder.MedReminderEntity;
+import org.herndl.parkinsonapp.medreminder.TaskMedAlarm;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;

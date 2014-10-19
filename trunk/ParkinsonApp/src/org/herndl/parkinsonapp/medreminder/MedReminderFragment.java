@@ -1,7 +1,10 @@
-package org.herndl.parkinsonapp;
+package org.herndl.parkinsonapp.medreminder;
 
 import java.util.Collections;
 import java.util.List;
+
+import org.herndl.parkinsonapp.R;
+import org.herndl.parkinsonapp.TaskHandler;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
