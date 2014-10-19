@@ -4,14 +4,18 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
 
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:name="com.orm.SugarApp"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light" >
         <activity
@@ -19,13 +23,38 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="DATABASE" android:value="parkinson.db" />
-		<meta-data android:name="VERSION" android:value="1" />
-		<meta-data android:name="QUERY_LOG" android:value="true" />
-		<meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="org.herndl.parkinson" />
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="parkinson.db" />
+        <meta-data
+            android:name="VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true" />
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="org.herndl.parkinson" />
+
+        <receiver android:name=".AlarmReceiver" />
+        <service android:name=".AlarmService" />
+        
+        <receiver android:name=".AlarmBootReceiver"
+                android:enabled="false">
+            <intent-filter>
+           	 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".AlarmService"
+            android:label="@string/title_activity_alarm"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
     </application>
+
 </manifest>
