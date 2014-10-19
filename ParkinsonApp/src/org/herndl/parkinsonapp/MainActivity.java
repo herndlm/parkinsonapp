@@ -1,5 +1,8 @@
 package org.herndl.parkinsonapp;
 
+import org.herndl.parkinsonapp.maps.CustomMapFragment;
+import org.herndl.parkinsonapp.medreminder.MedReminderFragment;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +18,7 @@ import android.view.MenuItem;
 @SuppressWarnings("deprecation")
 public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
- 
+
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the three primary sections of the app. We use a
@@ -125,7 +128,7 @@ public class MainActivity extends ActionBarActivity implements
 			case 0:
 				return new MedReminderFragment();
 			case 1:
-				return new MedReminderFragment();
+				return new CustomMapFragment();
 				/*
 				 * case 2: return new MedReminderFragment();
 				 */
