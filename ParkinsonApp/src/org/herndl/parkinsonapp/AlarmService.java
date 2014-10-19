@@ -13,8 +13,10 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,20 +62,30 @@ public class AlarmService extends IntentService {
     		    }
     		}
     		final Ringtone r = RingtoneManager.getRingtone(this, alert);
-    		r.play(); // TODO this should play, just not while I'm developing..
+    		//r.play(); // TODO this should play, just not while I'm developing..
+    		
+    		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    		@SuppressWarnings("deprecation")
+			final
+			PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
+    		wl.acquire();
+    		
+    		Log.v("AlarmService:onHandleIntent","go");
     		
     		// stop notifications after x seconds
-    		final Handler handler = new Handler();
-    	    handler.postDelayed(new Runnable() {
+    		new Handler().postDelayed(new Runnable() {
     	        @Override
     	        public void run() {
+    	        	Log.v("AlarmService:onHandleIntent","stop");
     	        	// stop playing ringtone
     	            if (r.isPlaying())
     	                r.stop();
     	            // stop vibrator
     	            vibrator.cancel();
+    	            // release power manager wake lock
+    	            wl.release();
     	        }
-    	    }, 30 * 1000);
+    	    }, 5 * 1000);
             
          // Release the wake lock provided by the BroadcastReceiver.
             AlarmReceiver.completeWakefulIntent(intent);

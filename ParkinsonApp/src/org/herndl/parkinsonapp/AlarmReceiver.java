@@ -96,15 +96,15 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         // Set the alarm's trigger time to 8:30 a.m.
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 35);
  
         
         // Set the alarm to fire at approximately 8:30 a.m., according to the device's
         // clock, and to repeat once a day.
-        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,  
-                calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
-//alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (3 * 1000)/*calendar.getTimeInMillis()*/, alarmIntent);
+        //alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,  
+        //        calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+alarmMgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (3 * 1000)/*calendar.getTimeInMillis()*/, alarmIntent);
 		
 		Toast.makeText(context, "Alarm set for 08:30",
 		        Toast.LENGTH_LONG).show();
