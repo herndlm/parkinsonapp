@@ -4,7 +4,5 @@
     <string name="app_name">ParkinsonApp</string>
     <string name="button_add">Add</string>
     <string name="action_about">About</string>
-    <string name="title_activity_alarm">AlarmActivity</string>
-    <string name="hello_world">Hello world!</string>
 
 </resources>

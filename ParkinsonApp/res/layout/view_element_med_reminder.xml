@@ -33,6 +33,7 @@
         android:layout_alignBottom="@+id/view_med_name"
         android:layout_centerHorizontal="true"
         android:layout_toRightOf="@id/view_med_name"
+        android:layout_toEndOf="@id/view_med_name"
         android:text="Dose"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
