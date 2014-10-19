@@ -39,22 +39,17 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="org.herndl.parkinson" />
-
-        <receiver android:name=".AlarmReceiver" />
-        <service android:name=".AlarmService" />
         
-        <receiver android:name=".AlarmBootReceiver"
-                android:enabled="false">
+        <service android:name=".TaskService" />
+        <service android:name=".TaskNotifyService" />
+        <receiver android:name=".TaskBootService"
+                android:enabled="true">
+                android:exported="true"
             <intent-filter>
-           	 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+           		<action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".AlarmService"
-            android:label="@string/title_activity_alarm"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
+        
     </application>
 
 </manifest>
