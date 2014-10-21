@@ -1,7 +1,8 @@
-package org.herndl.parkinsonapp.medreminder;
+package org.herndl.parkinsonapp.med;
 
 import java.util.Calendar;
 
+import org.herndl.parkinsonapp.R;
 import org.herndl.parkinsonapp.TaskNotifyService;
 
 import android.app.AlarmManager;
@@ -17,6 +18,7 @@ public class TaskMedAlarm implements Runnable {
 	private MedReminderEntity med;
 
 	public TaskMedAlarm(Context context, MedReminderEntity med) {
+		Log.v("TaskMedAlarm", "constructor");
 		this.context = context;
 		TaskMedAlarm.alarmMgr = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
@@ -28,15 +30,36 @@ public class TaskMedAlarm implements Runnable {
 			MedReminderEntity med) {
 		Intent intent = new Intent(context, TaskNotifyService.class);
 
-		String notification_title = "Notification Title";
-
-		// TODO build notification string
-		intent.putExtra("notification_title", notification_title);
-		intent.putExtra("notification_string", med.name);
+		// build notification string
+		intent.putExtra("notification_title",
+				context.getString(R.string.notification_title));
+		if (med.dose == 1)
+			intent.putExtra("notification_string", String.format(context
+					.getString(R.string.med_reminder_notification_singular),
+					med.name));
+		else
+			intent.putExtra("notification_string", String.format(context
+					.getString(R.string.med_reminder_notification_plural),
+					med.dose, med.name));
+		intent.putExtra("tracker_type", "med");
+		intent.putExtra("tracker_name", med.name);
+		intent.putExtra("tracker_intValue", med.dose);
 
 		// create pending intent for service and remove old ones floating around
-		return PendingIntent.getService(context, med.getIntId(), intent,
+		return PendingIntent.getService(context, med.hashCode(), intent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
+	}
+
+	public static Calendar getCalendar(MedReminderEntity med) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, med.remind_hour);
+		calendar.set(Calendar.MINUTE, med.remind_minute);
+		calendar.set(Calendar.SECOND, 0);
+		// fix immediately going of past alarms
+		// by setting it for the next day
+		if (calendar.before(Calendar.getInstance()))
+			calendar.add(Calendar.DATE, 1);
+		return calendar;
 	}
 
 	public static void cancel(Context context, MedReminderEntity med) {
@@ -48,17 +71,9 @@ public class TaskMedAlarm implements Runnable {
 		// create pending intent for service and remove old ones floating around
 		PendingIntent alarmIntent = createMedPendingIntent(context, med);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, med.remind_hour);
-		calendar.set(Calendar.MINUTE, med.remind_minute);
-		calendar.set(Calendar.SECOND, 0);
-		// fix immediately going of past alarms
-		// by setting it for the next day
-		if (calendar.before(Calendar.getInstance()))
-			calendar.add(Calendar.DATE, 1);
+		Calendar calendar = getCalendar(med);
 
-		Log.v("TaskAlarm", "set to run at " + calendar.getTime());
-
+		Log.v("TaskMedAlarm", "set to run at " + calendar.getTime());
 		alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP,
 				calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
 				alarmIntent);

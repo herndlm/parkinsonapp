@@ -2,8 +2,8 @@ package org.herndl.parkinsonapp;
 
 import java.util.List;
 
-import org.herndl.parkinsonapp.medreminder.MedReminderEntity;
-import org.herndl.parkinsonapp.medreminder.TaskMedAlarm;
+import org.herndl.parkinsonapp.med.MedReminderEntity;
+import org.herndl.parkinsonapp.med.TaskMedAlarm;
 
 import android.app.Service;
 import android.content.Intent;

@@ -11,7 +11,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
         android:padding="@dimen/text_padding_default"
-        android:text="Name"
+        android:text="@string/dialog_add_reminder_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="false"
         android:padding="@dimen/text_padding_default"
-        android:text="Time"
+        android:text="@string/dialog_add_reminder_time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -32,9 +32,9 @@
         android:layout_alignBaseline="@+id/view_med_name"
         android:layout_alignBottom="@+id/view_med_name"
         android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@id/view_med_name"
         android:layout_toEndOf="@id/view_med_name"
-        android:text="Dose"
+        android:layout_toRightOf="@id/view_med_name"
+        android:text="@string/dialog_add_reminder_dose"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout> 

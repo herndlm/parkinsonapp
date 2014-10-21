@@ -1,5 +1,9 @@
 package org.herndl.parkinsonapp;
 
+import java.util.Calendar;
+
+import org.herndl.parkinsonapp.track.TrackerEntity;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -12,6 +16,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -24,17 +29,26 @@ public class TaskNotifyService extends Service {
 		}
 	}
 
-	public static final int NOTIFICATION_ID = 1;
-	private NotificationManager mNotificationManager;
+	private static final int NOTIFICATION_ID = 1;
+	private static final long[] vibratePattern = { 0, 1000, 1000 };
+	private static final int notifyMaxSeconds = 60;
+	private static final int[] ringtoneTypes = { RingtoneManager.TYPE_ALARM,
+			RingtoneManager.TYPE_NOTIFICATION, RingtoneManager.TYPE_RINGTONE };
+	private static final String wakelockTag = "org.herndl.parkinsonapp.TaskNotifiyService";
 
-	@Override
-	public void onCreate() {
-		mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-	}
+	private static NotificationManager mNotificationManager = null;
+	private static Ringtone ringtone = null;
+	private static WakeLock wakeLock = null;
+	private static Vibrator vibrator = null;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v("TaskNotifiyService", "onStartCommand");
+
+		doTrack(intent.getStringExtra("tracker_type"),
+				intent.getStringExtra("tracker_name"),
+				intent.getIntExtra("tracker_intValue", 0),
+				intent.getStringExtra("tracker_stringValue"));
 
 		showNotification(intent.getStringExtra("notification_title"),
 				intent.getStringExtra("notification_string"));
@@ -51,15 +65,55 @@ public class TaskNotifyService extends Service {
 
 	private void showNotification(String notification_title,
 			String notification_string) {
-		Log.v("TaskNotifiyService:showNotification", "title: "
-				+ notification_title + ", string: " + notification_string);
 
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, MainActivity.class), 0);
+		Log.v("TaskNotifiyService", "showNotification");
 
+		startNotification(this, notification_title, notification_string);
+
+		// stop ringtone and vibrator after notifyMaxSeconds seconds
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				stopNotification();
+				// stop notification service
+				stopSelf();
+			}
+		}, notifyMaxSeconds * 1000);
+
+		// release power manager wake lock
+		wakeLock.release();
+	}
+
+	private void doTrack(String tracker_type, String tracker_name,
+			int tracker_intValue, String tracker_stringValue) {
+
+		TrackerEntity trackerEntity = new TrackerEntity(tracker_type,
+				tracker_name, tracker_intValue, tracker_stringValue,
+				Calendar.getInstance());
+		trackerEntity.save();
+
+		Log.v("TaskNotifyService", "doTrack " + trackerEntity);
+	}
+
+	@SuppressWarnings("deprecation")
+	public static void startNotification(Context context,
+			String notification_title, String notification_string) {
+
+		// wake the screen
+		PowerManager pm = (PowerManager) context
+				.getSystemService(Context.POWER_SERVICE);
+		wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+				| PowerManager.ACQUIRE_CAUSES_WAKEUP, wakelockTag);
+		wakeLock.acquire();
+
+		// build notification and notify the user
+		PendingIntent contentIntent = PendingIntent.getActivity(context,
+				NOTIFICATION_ID, new Intent(context, MainActivity.class),
+				PendingIntent.FLAG_CANCEL_CURRENT);
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this)
+				context)
 				.setSmallIcon(R.drawable.ic_launcher)
+				.setAutoCancel(true)
 				.setContentTitle(notification_title)
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
@@ -67,55 +121,35 @@ public class TaskNotifyService extends Service {
 				.setContentText(notification_string);
 
 		mBuilder.setContentIntent(contentIntent);
+		mNotificationManager = (NotificationManager) context
+				.getSystemService(NOTIFICATION_SERVICE);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
 
-		final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		// delay, vibrate, sleep
-		long[] pattern = { 0, 1000, 1000 };
-		vibrator.vibrate(pattern, 0);
+		// vibrate in the specified pattern
+		vibrator = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+		if (vibrator != null)
+			vibrator.vibrate(vibratePattern, 0);
 
-		// get default user ringtone and start playing
-		Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-		if (alert == null) {
-			// alert is null, using backup
-			alert = RingtoneManager
-					.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-			// I can't see this ever being null (as always have a default
-			// notification)
-			// but just incase
-			if (alert == null) {
-				// alert backup is null, using 2nd backup
-				alert = RingtoneManager
-						.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+		// get best matching user ringtone and start playing
+		Uri alert = null;
+		for (int type : ringtoneTypes) {
+			alert = RingtoneManager.getDefaultUri(type);
+			if (alert != null) {
+				ringtone = RingtoneManager.getRingtone(context, alert);
+				if (ringtone != null)
+					ringtone.play();
+				break;
 			}
 		}
-		final Ringtone r = RingtoneManager.getRingtone(this, alert);
-		if (r != null)
-			r.play();
-
-		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		@SuppressWarnings("deprecation")
-		final PowerManager.WakeLock wl = pm.newWakeLock(
-				PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-						| PowerManager.ACQUIRE_CAUSES_WAKEUP, "My Tag");
-		wl.acquire();
-
-		// stop notifications after x seconds
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				// stop playing ringtone
-				if (r != null && r.isPlaying())
-					r.stop();
-				// stop vibrator
-				vibrator.cancel();
-				// release power manager wake lock
-				wl.release();
-				// stop notification service
-				stopSelf();
-			}
-		}, 3 * 1000);
-
 	}
 
+	public static void stopNotification() {
+		// stop playing ringtone
+		if (ringtone != null && ringtone.isPlaying())
+			ringtone.stop();
+		// stop vibrator
+		if (vibrator != null)
+			vibrator.cancel();
+	}
 }

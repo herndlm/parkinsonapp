@@ -20,7 +20,7 @@
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentStart="true"
 	        android:layout_alignParentTop="true"
-	        android:text="Name:"
+	        android:text="@string/dialog_add_reminder_name"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    <EditText
@@ -46,7 +46,7 @@
 	        android:layout_alignStart="@+id/add_med_name"
 	        android:layout_below="@+id/add_med_name"
 	        android:layout_marginTop="@dimen/text_input_margin_default"
-	        android:text="Units:"
+	        android:text="@string/dialog_add_reminder_dose"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    <EditText
@@ -69,7 +69,7 @@
 	        android:layout_alignStart="@+id/add_med_dose"
 	        android:layout_below="@+id/add_med_dose"
 	        android:layout_marginTop="@dimen/text_input_margin_default"
-	        android:text="Time:"
+	        android:text="@string/dialog_add_reminder_time"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    <TimePicker
