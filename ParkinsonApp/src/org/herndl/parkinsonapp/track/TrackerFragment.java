@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -27,11 +28,15 @@ import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
 import com.jjoe64.graphview.GraphViewStyle;
 import com.jjoe64.graphview.LineGraphView;
 
+// tracker fragment which holds the GraphView object
 public class TrackerFragment extends Fragment {
 
+	// colors for graphs which are used in this order and start from the
+	// beginning if used up
 	private static int[] colorsDefault = { Color.BLUE, Color.RED, Color.GREEN,
 			Color.CYAN, Color.MAGENTA };
-
+	// long value which is used to normalize data by subtracting it from the
+	// biggest occurred value
 	private long x_value_biggest = 0;
 
 	@Override
@@ -41,9 +46,20 @@ public class TrackerFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_tracker, container,
 				false);
 
+		LinearLayout layout = (LinearLayout) rootView
+				.findViewById(R.id.tracker_layout);
+
 		// get all tracker entities
 		List<TrackerEntity> entities = TrackerEntity
 				.listAll(TrackerEntity.class);
+
+		// hide default shown instructions if enough data found
+		if (entities.size() > 1) {
+			TextView tracker_empty = (TextView) rootView
+					.findViewById(R.id.tracker_empty);
+			tracker_empty.setVisibility(View.GONE);
+		} else
+			return rootView;
 
 		// prepare med data in maps of maps
 		// like an array in the form <name - date - value>
@@ -58,10 +74,12 @@ public class TrackerFragment extends Fragment {
 			else
 				day_map = new TreeMap<Long, Integer>(Collections.reverseOrder());
 
-			// create an interval in Joda
+			// create an interval with Joda-Time
 			Interval interval = new Interval(entity.calendar.getTimeInMillis(),
 					Calendar.getInstance().getTimeInMillis());
 			// get the duration in days from today to med taken day
+			// this duration generates big x values for the oldest (left) values
+			// which calls for normalization
 			Duration duration = interval.toDuration();
 			Long date_formatted = duration.getStandardDays();
 			if (day_map.containsKey(date_formatted))
@@ -73,7 +91,7 @@ public class TrackerFragment extends Fragment {
 			med_map.put(entity.name, day_map);
 		}
 
-		// prepare graph data
+		// prepare graph data series
 		List<GraphViewSeries> graphViewSeries = new ArrayList<GraphViewSeries>();
 		int j = 0;
 		for (Entry<String, TreeMap<Long, Integer>> med_map_entry : med_map
@@ -92,11 +110,11 @@ public class TrackerFragment extends Fragment {
 			int i = 0;
 			// add graph data points
 			for (Entry<Long, Integer> day_map_entry : day_map.entrySet()) {
-				// normalize x values to begin with 0
+				// normalize x values to begin with 0 by subtracting them from
+				// the biggest occurred value, this transforms data like { 8, 5,
+				// 3 } to { 0, 3, 5} to be plottable
 				double x_value = x_value_biggest - day_map_entry.getKey(); // TODO
 				double y_value = day_map_entry.getValue();
-				// Log.v("track", "add data x_value " + x_value);
-				// Log.v("track", "add data y_value " + y_value);
 				data[i] = new GraphViewData(x_value, y_value);
 				i++;
 			}
@@ -108,11 +126,13 @@ public class TrackerFragment extends Fragment {
 		}
 
 		// create GraphView object and add all series
-		GraphView graphView = new LineGraphView(getActivity(), "MedGraphs") {
+		GraphView graphView = new LineGraphView(getActivity(),
+				getString(R.string.graph_title)) {
 			private List<Integer> value_y = new ArrayList<Integer>();
 			private List<Integer> value_x = new ArrayList<Integer>();
 
-			// use only integer labels
+			// use only integer labels and adapt the horizontal labels with nice
+			// readable day strings like "today", "yesterday", "7 days before"
 			@Override
 			protected String formatLabel(double value, boolean isValueX) {
 				int valueInt = (int) value;
@@ -134,12 +154,12 @@ public class TrackerFragment extends Fragment {
 					return "";
 			}
 		};
+		// add all series to the GraphView object
 		for (GraphViewSeries series : graphViewSeries) {
 			graphView.addSeries(series);
 		}
 
 		// set default graph parameters
-		// graphView.setScalable(true);
 		graphView.setShowLegend(true);
 		graphView.setLegendAlign(LegendAlign.BOTTOM);
 
@@ -149,10 +169,8 @@ public class TrackerFragment extends Fragment {
 		graphStyle.setHorizontalLabelsColor(Color.BLACK);
 		graphView.setGraphViewStyle(graphStyle);
 
-		LinearLayout layout = (LinearLayout) rootView
-				.findViewById(R.id.tracker_layout);
+		// add the GraphView to the layout and return it
 		layout.addView(graphView);
-
 		return rootView;
 	}
 }

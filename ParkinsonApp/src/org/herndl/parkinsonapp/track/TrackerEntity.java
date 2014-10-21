@@ -2,11 +2,12 @@ package org.herndl.parkinsonapp.track;
 
 import java.util.Calendar;
 
-import org.herndl.parkinsonapp.med.MedReminderEntity;
-
 import com.orm.SugarRecord;
 
-public class TrackerEntity extends SugarRecord<MedReminderEntity> {
+// DB persisted generic tracker entity, the intValue and stringValue
+// are designed to be used as tracking data while the type and name
+// distinguish different tracking entries
+public class TrackerEntity extends SugarRecord<TrackerEntity> {
 
 	public String type;
 	public String name;

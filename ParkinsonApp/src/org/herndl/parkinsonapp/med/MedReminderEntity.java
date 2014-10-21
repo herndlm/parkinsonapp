@@ -5,6 +5,7 @@ import java.util.Comparator;
 
 import com.orm.SugarRecord;
 
+// DB persisted med reminder entity
 public class MedReminderEntity extends SugarRecord<MedReminderEntity> {
 
 	public String name;
