@@ -44,7 +44,7 @@ public class TaskNotifyService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v("TaskNotifiyService", "onStartCommand");
-
+		
 		doTrack(intent.getStringExtra("tracker_type"),
 				intent.getStringExtra("tracker_name"),
 				intent.getIntExtra("tracker_intValue", 0),

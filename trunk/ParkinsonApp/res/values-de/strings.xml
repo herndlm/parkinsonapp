@@ -19,6 +19,13 @@
     <string name="dialog_add_reminder_time">Zeit:</string>
     <string name="network_down">Kein Netzwerk-Zugriff</string>
     <string name="error">Fehler</string>
+    <string name="today">heute</string>
+    <string name="yesterday">gestern</string>
+    
+    <plurals name="days_ago">
+        <item quantity="one">vor %1$s Tag</item>
+        <item quantity="other">vor %1$s Tagen</item>
+    </plurals>
     
     <plurals name="med_dose">
         <item quantity="one">%1$s Einheit</item>

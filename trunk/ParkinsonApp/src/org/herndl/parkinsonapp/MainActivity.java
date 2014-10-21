@@ -39,6 +39,16 @@ public class MainActivity extends ActionBarActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// fill tracker db with fake data
+		/*
+		 * Calendar cal = Calendar.getInstance(); SimpleDateFormat sdf = new
+		 * SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN); try {
+		 * cal.setTime(sdf.parse("15.10.2014 12:00")); } catch (ParseException
+		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }// all
+		 * done TrackerEntity trackerEntity = new TrackerEntity("med",
+		 * "Aspirin", 100, null, cal); trackerEntity.save();
+		 */
+
 		Log.d("MainActivity", "onCreate");
 		taskHandler = new TaskHandler(this);
 		taskHandler.doBindService();
