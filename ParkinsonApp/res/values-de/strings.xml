@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">ParkinsonApp</string>
-    <string name="fragment_reminder">Erinnerung</string>
+    <string name="fragment_reminder">Medizin Erinnerung</string>
     <string name="fragment_maps">Karte</string>
     <string name="fragment_tracker">Tracker</string>
     <string name="button_add">Hinzufügen</string>

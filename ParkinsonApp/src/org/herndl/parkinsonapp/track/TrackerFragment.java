@@ -74,6 +74,7 @@ public class TrackerFragment extends Fragment {
 				long x = day_map_entry.getKey(); // TODO
 				double y = day_map_entry.getValue();
 				Log.v("x", "" + x);
+				Log.v("y", "" + y);
 				data[(int) x] = new GraphViewData(x, y);
 			}
 
@@ -81,7 +82,7 @@ public class TrackerFragment extends Fragment {
 		}
 
 		GraphView graphView = new LineGraphView(getActivity() // context
-				, "GraphViewDemo" // heading
+				, "MedGraphs" // heading
 		);
 
 		for (GraphViewSeries series : graphViewSeries) {
