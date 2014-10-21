@@ -1,8 +1,10 @@
 package org.herndl.parkinsonapp;
 
 import org.herndl.parkinsonapp.maps.CustomMapFragment;
-import org.herndl.parkinsonapp.medreminder.MedReminderFragment;
+import org.herndl.parkinsonapp.med.MedReminderFragment;
+import org.herndl.parkinsonapp.track.TrackerFragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,10 +43,13 @@ public class MainActivity extends ActionBarActivity implements
 		taskHandler = new TaskHandler(this);
 		taskHandler.doBindService();
 
+		// stop notification
+		TaskNotifyService.stopNotification();
+
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections
 		// of the app.
-		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(
+		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(this,
 				getSupportFragmentManager());
 
 		// Set up the action bar.
@@ -90,6 +95,11 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	@Override
+	protected void onNewIntent(android.content.Intent intent) {
+		Log.v("onNewIntent", "yo");
+	};
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		taskHandler.doUnbindService();
@@ -119,8 +129,11 @@ public class MainActivity extends ActionBarActivity implements
 	 */
 	public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 
-		public AppSectionsPagerAdapter(FragmentManager fm) {
+		private Context context = null;
+
+		public AppSectionsPagerAdapter(Context context, FragmentManager fm) {
 			super(fm);
+			this.context = context;
 		}
 
 		public Fragment getItem(int i) {
@@ -129,9 +142,8 @@ public class MainActivity extends ActionBarActivity implements
 				return new MedReminderFragment();
 			case 1:
 				return new CustomMapFragment();
-				/*
-				 * case 2: return new MedReminderFragment();
-				 */
+			case 2:
+				return new TrackerFragment();
 			default:
 				return new Fragment();
 
@@ -147,13 +159,13 @@ public class MainActivity extends ActionBarActivity implements
 		public CharSequence getPageTitle(int pos) {
 			switch (pos) {
 			case 0:
-				return "Med Reminder";
+				return context.getString(R.string.fragment_reminder);
 			case 1:
-				return "EK Finder";
+				return context.getString(R.string.fragment_maps);
 			case 2:
-				return "Tracker";
+				return context.getString(R.string.fragment_tracker);
 			default:
-				return "error";
+				return context.getString(R.string.error);
 			}
 		}
 	}

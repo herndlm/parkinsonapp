@@ -1,4 +1,4 @@
-package org.herndl.parkinsonapp.medreminder;
+package org.herndl.parkinsonapp.med;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,8 +66,8 @@ public class MedReminderFragment extends Fragment {
 				// Add the buttons
 				builder.setTitle(
 						String.format(
-								"Soll die Erinnerung an %s wirklich gelöscht werden?",
-								med.name))
+								getResources().getString(
+										R.string.med_reminder_delete), med.name))
 						.setPositiveButton(android.R.string.ok,
 								new DialogInterface.OnClickListener() {
 									public void onClick(DialogInterface dialog,
@@ -159,7 +160,8 @@ public class MedReminderFragment extends Fragment {
 			// set MedReminderEntity data in gui views
 			MedReminderEntity med = listMeds.get(position);
 			med_name.setText(med.name);
-			med_dose.setText(String.format("%d", med.dose));
+			med_dose.setText(getResources().getQuantityString(
+					R.plurals.med_dose, med.dose, med.dose));
 			med_time.setText(String.format("%02d:%02d", med.remind_hour,
 					med.remind_minute));
 
@@ -185,9 +187,14 @@ public class MedReminderFragment extends Fragment {
 			// layout
 			final View view = inflater.inflate(
 					R.layout.dialog_med_reminder_add, null);
+			TimePicker input_med_time = (TimePicker) view
+					.findViewById(R.id.add_med_time);
+			// adapt time picker to user locale
+			input_med_time.setIs24HourView(DateFormat
+					.is24HourFormat(getActivity()));
 			builder.setView(view);
 
-			builder.setTitle("Reminder Add")
+			builder.setTitle(R.string.med_reminder_add_title)
 					.setPositiveButton(android.R.string.ok,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
@@ -211,7 +218,7 @@ public class MedReminderFragment extends Fragment {
 										Toast.makeText(
 												getActivity()
 														.getApplicationContext(),
-												"Name is required!",
+												R.string.med_reminder_add_name_required,
 												Toast.LENGTH_SHORT).show();
 										return;
 									}
@@ -219,7 +226,7 @@ public class MedReminderFragment extends Fragment {
 										Toast.makeText(
 												getActivity()
 														.getApplicationContext(),
-												"Dose is required!",
+												R.string.med_reminder_add_dose_required,
 												Toast.LENGTH_SHORT).show();
 										return;
 									}
@@ -256,7 +263,7 @@ public class MedReminderFragment extends Fragment {
 			return builder.create();
 		}
 
-		// unclean handle of fragment recreation bug in support library
+		// handling of fragment recreation bug in support library
 		// see https://code.google.com/p/android/issues/detail?id=17423
 		// e.g. retains the dialog on rotations
 		@Override
