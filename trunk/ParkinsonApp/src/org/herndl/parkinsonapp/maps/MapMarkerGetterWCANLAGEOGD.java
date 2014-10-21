@@ -21,12 +21,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+// class which retrieves JSON data from the data.wien.gv.at webservice, parses it and creates a list of MarkerOptions objects for the map 
 public class MapMarkerGetterWCANLAGEOGD implements CallbackString,
 		CallbackMapMarkerGetterWCANLAGEOGD {
 
 	private Context context;
+	// JSON data URL
 	private static final String dataURL = "http://data.wien.gv.at/daten/geo?service=WFS&request=GetFeature&version=1.1.0&typeName=ogdwien:WCANLAGEOGD&srsName=EPSG:4326&outputFormat=json";
-	private static final int cacheSeconds = 60 * 60 * 24 * 7; // 1 week
+	// cacheSeconds for the background dowloader, default 1 week
+	private static final int cacheSeconds = 60 * 60 * 24 * 7;
 
 	private CallbackMapMarkerGetterWCANLAGEOGD callbackMapMarkerGetterWCANLAGEOGD;
 
@@ -38,7 +41,8 @@ public class MapMarkerGetterWCANLAGEOGD implements CallbackString,
 
 		Log.v("MapMarkerGetterWCANLAGEOGD", "construct");
 
-		// check if the user has a network connection
+		// show a simple toast notification if the user has no network
+		// connection, then use the cache for data
 		if (!hasNetworkAccess()) {
 			Toast.makeText(context, R.string.network_down, Toast.LENGTH_SHORT)
 					.show();
@@ -60,7 +64,7 @@ public class MapMarkerGetterWCANLAGEOGD implements CallbackString,
 		}
 	}
 
-	// check if the user has an active network connection
+	// helper which checks if the user has an active network connection
 	private boolean hasNetworkAccess() {
 		ConnectivityManager connectivityManager = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -68,9 +72,8 @@ public class MapMarkerGetterWCANLAGEOGD implements CallbackString,
 		return (networkInfo != null && networkInfo.isConnected());
 	}
 
-	// callback from download task, parses json, builds the list
-	// of marker options and calls the methode which calls the origin callback
-	// methode
+	// callback from download task, parses JSON, builds the list of marker
+	// options and calls the methode which calls the origin callback methode
 	@Override
 	public void callbackString(String data) {
 		Log.v("MapMarkerGetterWCANLAGEOGD", "callbackString");
@@ -82,13 +85,38 @@ public class MapMarkerGetterWCANLAGEOGD implements CallbackString,
 			return;
 		}
 
+		// read JSON data which is structured in the following format
+		// "type":"FeatureCollection",
+		// "totalFeatures":181,
+		// "features":[{
+		// "type":"Feature",
+		// "id":"WCANLAGEOGD.129398",
+		// "geometry":{
+		// "type":"Point",
+		// "coordinates":[
+		// 16.349725322303783,
+		// 48.18076604721569
+		// ]},
+		// "geometry_name":"SHAPE",
+		// "properties":{
+		// "OBJECTID":129398,
+		// "BEZIRK":5,
+		// "STRASSE":"Eichenstr. / Fendig. (Abgang zur Straßenbahn)",
+		// "ONR":null,
+		// "TELEFON":"+43 (1) 546 48",
+		// "OEFFNUNGSZEIT":"Mo-So: 0-24 Uhr",
+		// "INFORMATION":"http://www.wien.gv.at/umwelt/ma48/sauberestadt/wc/index.html",
+		// "ABTEILUNG":"M48",
+		// "KATEGORIE":"WC-Anlage ohne Wartepersonal",
+		// "SE_ANNO_CAD_DATA":null
+		// }
+		// },
 		try {
 			JSONArray features = (JSONArray) new JSONObject(data)
 					.get("features");
 			for (int i = 0; i < features.length(); i++) {
 				JSONObject row = features.getJSONObject(i);
 				String type = row.getString("type");
-				// String id = row.getString("id");
 				String geometry_type = row.getJSONObject("geometry").getString(
 						"type");
 				JSONArray coordinates = row.getJSONObject("geometry")

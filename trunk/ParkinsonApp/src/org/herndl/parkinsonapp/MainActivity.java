@@ -1,9 +1,10 @@
 package org.herndl.parkinsonapp;
 
-import org.herndl.parkinsonapp.maps.CustomMapFragment;
+import org.herndl.parkinsonapp.maps.MapFragment;
 import org.herndl.parkinsonapp.med.MedReminderFragment;
 import org.herndl.parkinsonapp.track.TrackerFragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,102 +13,68 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
+/*
+ * this is the main activity which is called when opening the app
+ * the main layout initializations are done here
+ */
 @SuppressWarnings("deprecation")
 public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
 
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the three primary sections of the app. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
-
-	private ViewPager mViewPager;
-	private TaskHandler taskHandler = null;
+	// pager which holds the main fragments
+	AppSectionsPagerAdapter fragmentPager;
+	// viewpager for swipe navigation
+	private ViewPager viewPager;
+	// taskhandler binds to the notification service to set and unset alarms
+	private TaskHandler taskHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// fill tracker db with fake data
-		/*
-		 * Calendar cal = Calendar.getInstance(); SimpleDateFormat sdf = new
-		 * SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMAN); try {
-		 * cal.setTime(sdf.parse("15.10.2014 12:00")); } catch (ParseException
-		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }// all
-		 * done TrackerEntity trackerEntity = new TrackerEntity("med",
-		 * "Aspirin", 100, null, cal); trackerEntity.save();
-		 */
-
 		Log.d("MainActivity", "onCreate");
 		taskHandler = new TaskHandler(this);
 		taskHandler.doBindService();
 
-		// stop notification
+		// stop currently showing reminder notifications if there are some
 		TaskNotifyService.stopNotification();
 
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections
-		// of the app.
-		mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(this,
+		// adapter which returns the main fragments
+		fragmentPager = new AppSectionsPagerAdapter(this,
 				getSupportFragmentManager());
 
-		// Set up the action bar.
+		// action bar setup
 		final ActionBar actionBar = getSupportActionBar();
-
-		// Specify that the Home/Up button should not be enabled, since there is
-		// no hierarchical
-		// parent.
 		actionBar.setHomeButtonEnabled(false);
-
-		// Specify that we will be displaying tabs in the action bar.
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		// Set up the ViewPager, attaching the adapter and setting up a listener
-		// for when the
-		// user swipes between sections.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mAppSectionsPagerAdapter);
-		mViewPager
+		// attach the fragment adapter to the view pager and listen for changes
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager.setAdapter(fragmentPager);
+		// change tab according to swipe action in viewer
+		viewPager
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
-						// When swiping between different app sections, select
-						// the corresponding tab.
-						// We can also use ActionBar.Tab#select() to do this if
-						// we have a reference to the
-						// Tab.
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
 
-		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
-			// Create a tab with text corresponding to the page title defined by
-			// the adapter.
-			// Also specify this Activity object, which implements the
-			// TabListener interface, as the
-			// listener for when this tab is selected.
+		// fill up the actionbar with the fragment titles
+		for (int i = 0; i < fragmentPager.getCount(); i++) {
 			actionBar.addTab(actionBar.newTab()
-					.setText(mAppSectionsPagerAdapter.getPageTitle(i))
+					.setText(fragmentPager.getPageTitle(i))
 					.setTabListener(this));
 		}
 	}
-
-	@Override
-	protected void onNewIntent(android.content.Intent intent) {
-		Log.v("onNewIntent", "yo");
-	};
 
 	@Override
 	protected void onDestroy() {
@@ -115,31 +82,17 @@ public class MainActivity extends ActionBarActivity implements
 		taskHandler.doUnbindService();
 	};
 
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-	}
-
+	// change fragment according to tab selection
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in
-		// the ViewPager.
-		mViewPager.setCurrentItem(tab.getPosition());
+		viewPager.setCurrentItem(tab.getPosition());
 	}
 
-	@Override
-	public void onTabReselected(ActionBar.Tab tab,
-			FragmentTransaction fragmentTransaction) {
-	}
-
-	/**
-	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-	 * one of the primary sections of the app.
-	 */
+	// fragment pager adapter which returns the fragments and their titles
 	public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 
-		private Context context = null;
+		private Context context;
 
 		public AppSectionsPagerAdapter(Context context, FragmentManager fm) {
 			super(fm);
@@ -151,12 +104,11 @@ public class MainActivity extends ActionBarActivity implements
 			case 0:
 				return new MedReminderFragment();
 			case 1:
-				return new CustomMapFragment();
+				return new MapFragment();
 			case 2:
 				return new TrackerFragment();
 			default:
 				return new Fragment();
-
 			}
 		}
 
@@ -180,25 +132,40 @@ public class MainActivity extends ActionBarActivity implements
 		}
 	}
 
+	// build menu
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
+	// helper function to show a simple about dialog
+	private void showAbout() {
+		View messageView = getLayoutInflater().inflate(R.layout.about,
+				(ViewGroup) findViewById(R.id.about_layout), false);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setIcon(R.drawable.ic_launcher);
+		builder.setTitle(R.string.app_name);
+		builder.setView(messageView);
+		builder.create();
+		builder.show();
+	}
+
+	// handle option select actions
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_about) {
-			return true;
-		} else if (id == R.id.action_about) {
-			Log.v(this.getClass().getName(), "pressed about");
-			return true;
-		}
+		if (id == R.id.action_about)
+			showAbout();
 		return super.onOptionsItemSelected(item);
+	}
+
+	// unnused methodes
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
 	}
 }

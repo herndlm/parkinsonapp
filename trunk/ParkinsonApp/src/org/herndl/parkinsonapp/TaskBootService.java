@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+/*
+ * this class handles starting the TaskService after a reboot
+ */
 public class TaskBootService extends BroadcastReceiver {
 
-	// start TaskService on boot
+	// start TaskService on boot, needs special permissions and configuration in
+	// the application manifest to receive the intent
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Log.v("TaskBootService", "onReceive");

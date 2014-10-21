@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+// the fragment which holds the med reminder data
 public class MedReminderFragment extends Fragment {
 
 	private List<MedReminderEntity> listMeds;
@@ -41,12 +42,16 @@ public class MedReminderFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_med_reminder,
 				container, false);
 
-		// get all saved med reminders and fill list
 		ListView listMedReminder = (ListView) rootView
 				.findViewById(R.id.med_reminder_list);
 
 		// query all meds from DB
 		listMeds = MedReminderEntity.listAll(MedReminderEntity.class);
+
+		// show instructions if nothing found
+		TextView med_reminder_empty = (TextView) rootView
+				.findViewById(R.id.med_reminder_empty);
+		listMedReminder.setEmptyView(med_reminder_empty);
 
 		// sort after remind time with custom comparator
 		Collections.sort(listMeds, new MedReminderEntity.medComparator());
@@ -63,7 +68,7 @@ public class MedReminderFragment extends Fragment {
 
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						getActivity());
-				// Add the buttons
+				// dialog buttons
 				builder.setTitle(
 						String.format(
 								getResources().getString(
@@ -84,13 +89,13 @@ public class MedReminderFragment extends Fragment {
 									}
 								});
 
-				// Create the AlertDialog
+				// creat the dialog
 				AlertDialog dialog = builder.create();
 				dialog.show();
 			}
 		});
 
-		// start MedReminderAddDialog when clicking on add button
+		// show MedReminderAddDialog when clicking on add button
 		Button addButton = (Button) rootView
 				.findViewById(R.id.med_reminder_button_add);
 		addButton.setOnClickListener(new View.OnClickListener() {
@@ -104,31 +109,34 @@ public class MedReminderFragment extends Fragment {
 		return rootView;
 	}
 
+	// helper methode for removing a med item
 	public void removeMedItem(int position) {
 		MedReminderEntity med = listMeds.get(position);
 		// remove reminder via TaskHandler
 		TaskHandler.cancelMedAlarm(med);
 		// remove entity from DB
 		med.delete();
-		// remove from list
+		// remove from med list
 		listMeds.remove(position);
-		// update view via adapter
+		// update list view via adapter
 		adapterMeds.notifyDataSetChanged();
 	}
 
+	// helper methode for adding a med item
 	public void addMedItem(MedReminderEntity med) {
 		// save entity in DB
 		med.save();
-		// add to list
+		// add to med list
 		listMeds.add(med);
 		// sort after remind time with custom comparator
 		Collections.sort(listMeds, new MedReminderEntity.medComparator());
 		// set reminder via TaskHandler
 		TaskHandler.setMedAlarm(med);
-		// update view via adapter
+		// update list view via adapter
 		adapterMeds.notifyDataSetChanged();
 	}
 
+	// custom data adapter for the list view
 	public class MedReminderAdapter extends ArrayAdapter<MedReminderEntity> {
 		private final Context context;
 		private final List<MedReminderEntity> listMeds;
@@ -169,6 +177,7 @@ public class MedReminderFragment extends Fragment {
 		}
 	}
 
+	// med reminder add dialog
 	@SuppressLint("InflateParams")
 	public class MedReminderAddDialog extends DialogFragment {
 
@@ -177,14 +186,9 @@ public class MedReminderFragment extends Fragment {
 			super.onCreateDialog(savedInstanceState);
 			setRetainInstance(true);
 
-			// Use the Builder class for convenient dialog construction
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			// Get the layout inflater
 			LayoutInflater inflater = getActivity().getLayoutInflater();
 
-			// Inflate and set the layout for the dialog
-			// Pass null as the parent view because its going in the dialog
-			// layout
 			final View view = inflater.inflate(
 					R.layout.dialog_med_reminder_add, null);
 			TimePicker input_med_time = (TimePicker) view
@@ -195,6 +199,7 @@ public class MedReminderFragment extends Fragment {
 			builder.setView(view);
 
 			builder.setTitle(R.string.med_reminder_add_title)
+					// ok button handling
 					.setPositiveButton(android.R.string.ok,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
@@ -252,6 +257,7 @@ public class MedReminderFragment extends Fragment {
 									addMedItem(med);
 								}
 							})
+					// cancel button handling
 					.setNegativeButton(android.R.string.cancel,
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
@@ -259,7 +265,7 @@ public class MedReminderFragment extends Fragment {
 									// do nothing
 								}
 							});
-			// Create the AlertDialog object and return it
+			// create the AlertDialog object and return it
 			return builder.create();
 		}
 

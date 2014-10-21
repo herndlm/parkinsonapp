@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+// this class runs in a thread and creates the intent and notification data in an alarm for the TaskNotifyService
 public class TaskMedAlarm implements Runnable {
 
 	private static AlarmManager alarmMgr;
@@ -25,12 +26,13 @@ public class TaskMedAlarm implements Runnable {
 		this.med = med;
 	}
 
-	// used to set and also delete intents
+	// used to set and also delete intents and their notification alarms
 	public static PendingIntent createMedPendingIntent(Context context,
 			MedReminderEntity med) {
 		Intent intent = new Intent(context, TaskNotifyService.class);
 
-		// build notification string
+		// build notification data and put it into intent
+		intent.putExtra("notification_id", med.hashCode());
 		intent.putExtra("notification_title",
 				context.getString(R.string.notification_title));
 		if (med.dose == 1)
@@ -45,11 +47,13 @@ public class TaskMedAlarm implements Runnable {
 		intent.putExtra("tracker_name", med.name);
 		intent.putExtra("tracker_intValue", med.dose);
 
-		// create pending intent for service and remove old ones floating around
+		// create new pending intent for service which cancels old ones
 		return PendingIntent.getService(context, med.hashCode(), intent,
 				PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
+	// helper methode which gets the corresponding Calendar object to an med
+	// reminder object
 	public static Calendar getCalendar(MedReminderEntity med) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, med.remind_hour);
@@ -62,15 +66,18 @@ public class TaskMedAlarm implements Runnable {
 		return calendar;
 	}
 
+	// helper methode which cancels an already set notification alarm by
+	// creating the same intent as before from the med reminder object
 	public static void cancel(Context context, MedReminderEntity med) {
 		alarmMgr.cancel(createMedPendingIntent(context, med));
 	}
 
+	// creates an alarm for one med reminder object which has been set in the
+	// constructor, the current default interval is a day, this could be made
+	// user settable via GUI
 	@Override
 	public void run() {
-		// create pending intent for service and remove old ones floating around
 		PendingIntent alarmIntent = createMedPendingIntent(context, med);
-
 		Calendar calendar = getCalendar(med);
 
 		Log.v("TaskMedAlarm", "set to run at " + calendar.getTime());

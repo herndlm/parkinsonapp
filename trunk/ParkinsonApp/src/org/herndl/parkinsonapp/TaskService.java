@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
+// the service which does the setting and unsetting of alarms
 public class TaskService extends Service {
 
 	// binder which receives interactions from clients
@@ -23,6 +24,7 @@ public class TaskService extends Service {
 		}
 	}
 
+	// all alarms are set if the service is started manually (reboot)
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v("TaskService", "onStartCommand");
@@ -46,14 +48,12 @@ public class TaskService extends Service {
 		TaskMedAlarm.cancel(this, med);
 	}
 
-	// for service init (on boot, first start, ..)
 	public void setAllMedAlarms() {
 		Log.v("TaskService", "setAllAlarms");
 
-		// query all meds from DB
+		// query all med reminders from DB and set them
 		List<MedReminderEntity> listMeds = MedReminderEntity
 				.listAll(MedReminderEntity.class);
-
 		for (MedReminderEntity med : listMeds) {
 			setMedAlarm(med);
 		}

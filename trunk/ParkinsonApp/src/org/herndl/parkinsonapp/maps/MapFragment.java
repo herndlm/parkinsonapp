@@ -15,11 +15,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CustomMapFragment extends SupportMapFragment implements
+// the fragment which holds the GoogleMap object with overlays
+public class MapFragment extends SupportMapFragment implements
 		CallbackMapMarkerGetterWCANLAGEOGD {
 
 	private GoogleMap map = null;
-
+	// default zoom factor
 	private static final int defaultMapZoomFactor = 15;
 
 	@Override
@@ -41,7 +42,7 @@ public class CustomMapFragment extends SupportMapFragment implements
 				this);
 	}
 
-	// callback which is adding the markers
+	// callback which is adding the markers to the map
 	@Override
 	public void callbackMapMarkerGetterWCANLAGEOGD(
 			List<MarkerOptions> markerOptions) {
@@ -52,6 +53,7 @@ public class CustomMapFragment extends SupportMapFragment implements
 		}
 	}
 
+	// helper function centers the app to the current location of the user
 	private void centerMapOnMyLocation() {
 		Log.v("CustomMapFragment", "centerMapOnMyLocation");
 

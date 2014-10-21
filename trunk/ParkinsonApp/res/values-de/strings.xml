@@ -2,8 +2,8 @@
 <resources>
 
     <string name="app_name">ParkinsonApp</string>
-    <string name="fragment_reminder">Medizin Erinnerung</string>
-    <string name="fragment_maps">Karte</string>
+    <string name="fragment_reminder">Erinnerung</string>
+    <string name="fragment_maps">Maps</string>
     <string name="fragment_tracker">Tracker</string>
     <string name="button_add">Hinzufügen</string>
     <string name="action_about">Über</string>
@@ -21,7 +21,9 @@
     <string name="error">Fehler</string>
     <string name="today">heute</string>
     <string name="yesterday">gestern</string>
-    
+    <string name="graph_title">MedDiagramme</string>
+    <string name="med_reminder_empty_info">Zurzeit sind keine Erinnerungen gesetzt. Bitte wählen Sie \"Hinzufügen\" um die Anwendung zu benutzen.</string>
+    <string name="track_empty_info">Es sind noch nicht genug Daten aufgezeichnet worden um ein Diagramm zeichnen zu können. Bitte überprüfen Sie ob Erinnerungen aktiviert sind und warten Sie noch etwas.</string>
     <plurals name="days_ago">
         <item quantity="one">vor %1$s Tag</item>
         <item quantity="other">vor %1$s Tagen</item>
@@ -31,5 +33,8 @@
         <item quantity="one">%1$s Einheit</item>
         <item quantity="other">%1$s Einheiten</item>
     </plurals>
+    
+    <string name="about_desc">Anwendung für Menschen mit Parkinson mit Medikamenten-Erinnerung, Google Maps WC-Suche Einblendung und einem Tracking-Tool, das festhält wie sich die Medikation verändet.\nFeedback und Verbesserungsvorschläge sind herzlich willkommen unter app@herndl.org</string>
+    <string name="about_credits">Verwendete Bibliotheken / Services:\nSugar ORM\nhttp://satyan.github.io/sugar/\n\nJoda-Time\nhttp://www.joda.org/joda-time/\n\nGraphView\nhttp://android-graphview.org/\n\nWien Open Government Data\nhttps://www.data.gv.at/</string>
 
 </resources>
