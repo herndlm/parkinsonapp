@@ -4,13 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <TextView
         android:id="@+id/tracker_empty"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_weight="1"
         android:padding="@dimen/text_big_padding"
         android:text="@string/track_empty_info"
         android:textSize="@dimen/text_size_big" />
+
+    <LinearLayout
+        android:id="@+id/tracker_graph_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="@dimen/text_big_padding" >
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_tracker_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_weight="0"
+        android:paddingBottom="@dimen/button_padding_default"
+        android:paddingLeft="@dimen/button_padding_default"
+        android:paddingRight="@dimen/button_padding_default"
+        android:paddingTop="@dimen/button_padding_default"
+        android:text="@string/tracker_add_custom" />
 
 </LinearLayout>

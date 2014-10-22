@@ -15,14 +15,19 @@
     <string name="med_reminder_add_dose_required">The number of units ist required!</string>
     <string name="med_reminder_notification_singular">"Please take 1 unit of %1$s"</string>
     <string name="med_reminder_notification_plural">"Please take %1$d units of %2$s"</string>
-    <string name="dialog_add_reminder_name">Name:</string>
-    <string name="dialog_add_reminder_dose">Units:</string>
-    <string name="dialog_add_reminder_time">Time:</string>
+    <string name="dialog_name">Name:</string>
+    <string name="dialog_name_assign">Name / Association:</string>
+    <string name="dialog_dose">Units:</string>
+    <string name="dialog_time">Time:</string>
+    <string name="dialog_date">Date:</string>
+    <string name="dialog_value">Value / Units:</string>
     <string name="network_down">Can\'t access network</string>
     <string name="error">Error</string>
     <string name="today">today</string>
     <string name="yesterday">yesterday</string>
     <string name="graph_title">MedGraphs</string>
+    <string name="tracker_add_custom">Add a tracking event</string>
+    <string name="tracker_add_title">New tracking event</string>
     <string name="med_reminder_empty_info">There are no reminders set at the moment. Please tap \"Add\" to start using the app.</string>
     <string name="track_empty_info">There is not enough data recorded to plot a nice graph. Please check if there are reminders set and wait a little longer.</string>
     
