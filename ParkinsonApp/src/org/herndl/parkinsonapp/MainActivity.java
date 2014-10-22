@@ -106,6 +106,7 @@ public class MainActivity extends ActionBarActivity implements
 			this.context = context;
 		}
 
+		@Override
 		public Fragment getItem(int i) {
 			switch (i) {
 			case 0:

@@ -5,6 +5,8 @@ import java.util.List;
 import org.herndl.parkinsonapp.med.MedReminderEntity;
 import org.herndl.parkinsonapp.med.TaskMedAlarm;
 
+import com.orm.SugarRecord;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -52,7 +54,7 @@ public class TaskService extends Service {
 		Log.v("TaskService", "setAllAlarms");
 
 		// query all med reminders from DB and set them
-		List<MedReminderEntity> listMeds = MedReminderEntity
+		List<MedReminderEntity> listMeds = SugarRecord
 				.listAll(MedReminderEntity.class);
 		for (MedReminderEntity med : listMeds) {
 			setMedAlarm(med);

@@ -67,6 +67,7 @@ public class MedReminderAddEditDialog extends DialogFragment {
 				// ok button handling
 				.setPositiveButton(android.R.string.ok,
 						new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int id) {
 								// read user input
 								String med_name = input_med_name.getText()
