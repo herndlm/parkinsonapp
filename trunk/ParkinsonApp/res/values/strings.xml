@@ -9,6 +9,7 @@
     <string name="action_about">About</string>
     <string name="notification_title">Reminder</string>
     <string name="med_reminder_delete">"Do you really want to delete the Reminder of %1$s?"</string>
+    <string name="med_reminder_edit_title">Edit Reminder</string>
     <string name="med_reminder_add_title">New Reminder</string>
     <string name="med_reminder_add_name_required">The name ist required!</string>
     <string name="med_reminder_add_dose_required">The number of units ist required!</string>

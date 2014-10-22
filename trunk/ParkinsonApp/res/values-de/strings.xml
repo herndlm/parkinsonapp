@@ -9,6 +9,7 @@
     <string name="action_about">Über</string>
     <string name="notification_title">Erinnerung</string>
     <string name="med_reminder_delete">"Wollen Sie wirklich die Erinnerung an %1$s löschen?"</string>
+    <string name="med_reminder_edit_title">Erinnerung bearbeiten</string>
     <string name="med_reminder_add_title">Neue Erinnerung</string>
     <string name="med_reminder_add_name_required">Der Name muss angegeben werden!</string>
     <string name="med_reminder_add_dose_required">Die Einheiten müssen angegeben werden!</string>
