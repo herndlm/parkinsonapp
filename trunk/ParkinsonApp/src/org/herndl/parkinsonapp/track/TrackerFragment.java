@@ -38,6 +38,7 @@ import com.jjoe64.graphview.GraphViewSeries;
 import com.jjoe64.graphview.GraphViewSeries.GraphViewSeriesStyle;
 import com.jjoe64.graphview.GraphViewStyle;
 import com.jjoe64.graphview.LineGraphView;
+import com.orm.SugarRecord;
 
 // tracker fragment which holds the GraphView object
 public class TrackerFragment extends Fragment {
@@ -66,7 +67,7 @@ public class TrackerFragment extends Fragment {
 				.inflate(R.layout.fragment_tracker, container, false);
 
 		// get all tracker entities
-		entities = TrackerEntity.listAll(TrackerEntity.class);
+		entities = SugarRecord.listAll(TrackerEntity.class);
 
 		// show TrackAddDialog when clicking on add button
 		Button addButton = (Button) rootView
@@ -235,6 +236,7 @@ public class TrackerFragment extends Fragment {
 					// ok button handling
 					.setPositiveButton(android.R.string.ok,
 							new DialogInterface.OnClickListener() {
+								@Override
 								public void onClick(DialogInterface dialog,
 										int id) {
 									// get all user inputs

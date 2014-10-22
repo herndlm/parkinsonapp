@@ -7,6 +7,8 @@ import org.herndl.parkinsonapp.R;
 import org.herndl.parkinsonapp.TaskHandler;
 import org.herndl.parkinsonapp.med.MedReminderAddEditDialog.MedReminderAddEditDialogMode;
 
+import com.orm.SugarRecord;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +43,7 @@ public class MedReminderFragment extends Fragment {
 				.findViewById(R.id.med_reminder_list);
 
 		// query all meds from DB
-		listMeds = MedReminderEntity.listAll(MedReminderEntity.class);
+		listMeds = SugarRecord.listAll(MedReminderEntity.class);
 
 		// show instructions if nothing found
 		TextView med_reminder_empty = (TextView) rootView
@@ -57,6 +59,7 @@ public class MedReminderFragment extends Fragment {
 
 		// OnItemClickListener for med edit actions
 		listMedReminder.setOnItemClickListener(new OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				DialogFragment dialog = new MedReminderAddEditDialog(
@@ -70,6 +73,7 @@ public class MedReminderFragment extends Fragment {
 		// OnItemLongClickListener for med delete actions
 		listMedReminder
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
+					@Override
 					public boolean onItemLongClick(AdapterView<?> parent,
 							View view, final int position, long id) {
 						AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -83,6 +87,7 @@ public class MedReminderFragment extends Fragment {
 										listMeds.get(position).name))
 								.setPositiveButton(android.R.string.ok,
 										new DialogInterface.OnClickListener() {
+											@Override
 											public void onClick(
 													DialogInterface dialog,
 													int id) {

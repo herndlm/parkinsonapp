@@ -18,3 +18,29 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-ignorewarnings
+-dontoptimize
+-dontobfuscate
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+
+-libraryjars lib/GraphView-3.1.3.jar
+-libraryjars lib/joda-time-2.5.jar
+-libraryjars lib/sugar-1.3.jar
+
+-dontwarn org.joda.convert.**
+
+-keep public class * extends com.orm.SugarApp
+-keep public class * extends com.orm.SugarRecord
+-keep class android.support.v7.appcompat.** { public protected *; }
+-keep class android.support.v4.** { public protected *; }
+
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}
