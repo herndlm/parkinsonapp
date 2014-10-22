@@ -79,20 +79,20 @@ public class TrackerFragment extends Fragment {
 			}
 		});
 
-		// hide default shown instructions if enough data found
-		if (entities.size() > 1) {
-			TextView tracker_empty = (TextView) rootView
-					.findViewById(R.id.tracker_empty);
-			tracker_empty.setVisibility(View.GONE);
-		} else
-			return rootView;
-
 		initGraphView();
 
 		return rootView;
 	}
 
 	private void initGraphView() {
+		// hide default shown instructions if enough data found
+		if (entities.size() > 1) {
+			TextView tracker_empty = (TextView) rootView
+					.findViewById(R.id.tracker_empty);
+			tracker_empty.setVisibility(View.GONE);
+		} else
+			return;
+
 		// prepare med data in maps of maps
 		// like an array in the form <name - date - value>
 		TreeMap<String, TreeMap<Long, Integer>> med_map = new TreeMap<String, TreeMap<Long, Integer>>();
