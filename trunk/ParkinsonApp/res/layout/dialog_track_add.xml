@@ -12,68 +12,68 @@
 	    android:paddingTop="@dimen/activity_vertical_margin" >
 	
 	    <TextView
-	        android:id="@+id/add_med_name_label"
+	        android:id="@+id/track_name_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentStart="true"
 	        android:layout_alignParentTop="true"
-	        android:text="@string/dialog_name"
+	        android:text="@string/dialog_name_assign"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    <EditText
-	        android:id="@+id/add_med_name"
+	        android:id="@+id/track_name"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentEnd="true"
 	        android:layout_alignParentLeft="true"
 	        android:layout_alignParentRight="true"
 	        android:layout_alignParentStart="true"
-	        android:layout_below="@+id/add_med_name_label"
+	        android:layout_below="@+id/track_name_label"
 	        android:ems="10"
 	        android:inputType="text" />
 	
 	    <TextView
-	        android:id="@+id/add_med_dose_label"
+	        android:id="@+id/track_value_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/add_med_name"
-	        android:layout_alignStart="@+id/add_med_name"
-	        android:layout_below="@+id/add_med_name"
+	        android:layout_alignLeft="@+id/track_name"
+	        android:layout_alignStart="@+id/track_name"
+	        android:layout_below="@+id/track_name"
 	        android:layout_marginTop="@dimen/text_input_margin_default"
-	        android:text="@string/dialog_dose"
+	        android:text="@string/dialog_value"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
 	    <EditText
-	        android:id="@+id/add_med_dose"
+	        android:id="@+id/track_value"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/add_med_dose_label"
-	        android:layout_alignStart="@+id/add_med_dose_label"
+	        android:layout_alignLeft="@+id/track_value_label"
+	        android:layout_alignStart="@+id/track_value_label"
 	        android:layout_alignParentRight="true"
 	        android:layout_alignParentEnd="true"
-	        android:layout_below="@+id/add_med_dose_label"
+	        android:layout_below="@+id/track_value_label"
 	        android:ems="10"
 	        android:inputType="number" />
 	
 	    <TextView
-	        android:id="@+id/add_med_time_label"
+	        android:id="@+id/track_date_label"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/add_med_dose"
-	        android:layout_alignStart="@+id/add_med_dose"
-	        android:layout_below="@+id/add_med_dose"
+	        android:layout_alignLeft="@+id/track_value"
+	        android:layout_alignStart="@+id/track_value"
+	        android:layout_below="@+id/track_value"
 	        android:layout_marginTop="@dimen/text_input_margin_default"
-	        android:text="@string/dialog_time"
+	        android:text="@string/dialog_date"
 	        android:textAppearance="?android:attr/textAppearanceMedium" />
 	
-	    <TimePicker
-	        android:id="@+id/add_med_time"
+	    <DatePicker
+	        android:id="@+id/track_date"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_alignLeft="@+id/add_med_time_label"
-	        android:layout_alignStart="@+id/add_med_time_label"
-	        android:layout_below="@+id/add_med_time_label" />
+	        android:layout_alignLeft="@+id/track_date_label"
+	        android:layout_alignStart="@+id/track_date_label"
+	        android:layout_below="@+id/track_date_label" />
 
 	</RelativeLayout>
 </ScrollView>

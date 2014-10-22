@@ -3,7 +3,7 @@
 
     <string name="app_name">ParkinsonApp</string>
     <string name="fragment_reminder">Erinnerung</string>
-    <string name="fragment_maps">Maps</string>
+    <string name="fragment_maps">Karte</string>
     <string name="fragment_tracker">Tracker</string>
     <string name="button_add">Hinzufügen</string>
     <string name="action_about">Über</string>
@@ -15,14 +15,19 @@
     <string name="med_reminder_add_dose_required">Die Einheiten müssen angegeben werden!</string>
     <string name="med_reminder_notification_singular">"Bitte 1 Einheit %1$s einnehmen"</string>
     <string name="med_reminder_notification_plural">"Bitte %1$d Einheiten %2$s einnehmen"</string>
-    <string name="dialog_add_reminder_name">Name:</string>
-    <string name="dialog_add_reminder_dose">Einheiten:</string>
-    <string name="dialog_add_reminder_time">Zeit:</string>
+    <string name="dialog_name">Name:</string>
+    <string name="dialog_name_assign">Name / Zuordnung:</string>
+    <string name="dialog_dose">Einheiten:</string>
+    <string name="dialog_time">Zeit:</string>
+    <string name="dialog_date">Datum:</string>
+    <string name="dialog_value">Wert / Einheiten:</string>
     <string name="network_down">Kein Netzwerk-Zugriff</string>
     <string name="error">Fehler</string>
     <string name="today">heute</string>
     <string name="yesterday">gestern</string>
     <string name="graph_title">MedDiagramme</string>
+    <string name="tracker_add_custom">Tracking Event hinzufügen</string>
+    <string name="tracker_add_title">Neues Tracking Event</string>
     <string name="med_reminder_empty_info">Zurzeit sind keine Erinnerungen gesetzt. Bitte wählen Sie \"Hinzufügen\" um die Anwendung zu benutzen.</string>
     <string name="track_empty_info">Es sind noch nicht genug Daten aufgezeichnet worden um ein Diagramm zeichnen zu können. Bitte überprüfen Sie ob Erinnerungen aktiviert sind und warten Sie noch etwas.</string>
     <plurals name="days_ago">

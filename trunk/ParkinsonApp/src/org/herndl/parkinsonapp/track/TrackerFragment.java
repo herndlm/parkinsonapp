@@ -8,17 +8,28 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.herndl.parkinsonapp.R;
+import org.herndl.parkinsonapp.med.MedReminderFragment;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -35,23 +46,38 @@ public class TrackerFragment extends Fragment {
 	// beginning if used up
 	private static int[] colorsDefault = { Color.BLUE, Color.RED, Color.GREEN,
 			Color.CYAN, Color.MAGENTA };
+	// max days to show in the viewport (then it gets scrollable)
+	private static int viewPortMaxDays = 31;
 	// long value which is used to normalize data by subtracting it from the
 	// biggest occurred value
 	private long x_value_biggest = 0;
+	// all tracker entities
+	private static List<TrackerEntity> entities;
+	// rootView of the fragment
+	private static View rootView;
+	// graphView object
+	private GraphView graphView = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View rootView = inflater.inflate(R.layout.fragment_tracker, container,
-				false);
-
-		LinearLayout layout = (LinearLayout) rootView
-				.findViewById(R.id.tracker_layout);
+		rootView = inflater
+				.inflate(R.layout.fragment_tracker, container, false);
 
 		// get all tracker entities
-		List<TrackerEntity> entities = TrackerEntity
-				.listAll(TrackerEntity.class);
+		entities = TrackerEntity.listAll(TrackerEntity.class);
+
+		// show TrackAddDialog when clicking on add button
+		Button addButton = (Button) rootView
+				.findViewById(R.id.button_tracker_add);
+		addButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				DialogFragment dialog = new TrackAddDialog();
+				dialog.show(getFragmentManager(), "dialog_track_add");
+			}
+		});
 
 		// hide default shown instructions if enough data found
 		if (entities.size() > 1) {
@@ -61,6 +87,12 @@ public class TrackerFragment extends Fragment {
 		} else
 			return rootView;
 
+		initGraphView();
+
+		return rootView;
+	}
+
+	private void initGraphView() {
 		// prepare med data in maps of maps
 		// like an array in the form <name - date - value>
 		TreeMap<String, TreeMap<Long, Integer>> med_map = new TreeMap<String, TreeMap<Long, Integer>>();
@@ -74,9 +106,16 @@ public class TrackerFragment extends Fragment {
 			else
 				day_map = new TreeMap<Long, Integer>(Collections.reverseOrder());
 
+			Calendar calendar_entry = entity.calendar;
+			Calendar calendar_now = Calendar.getInstance();
+
+			// ignore future entries
+			if (calendar_entry.after(calendar_now))
+				continue;
+
 			// create an interval with Joda-Time
-			Interval interval = new Interval(entity.calendar.getTimeInMillis(),
-					Calendar.getInstance().getTimeInMillis());
+			Interval interval = new Interval(calendar_entry.getTimeInMillis(),
+					calendar_now.getTimeInMillis());
 			// get the duration in days from today to med taken day
 			// this duration generates big x values for the oldest (left) values
 			// which calls for normalization
@@ -126,22 +165,18 @@ public class TrackerFragment extends Fragment {
 		}
 
 		// create GraphView object and add all series
-		GraphView graphView = new LineGraphView(getActivity(),
+		graphView = new LineGraphView(getActivity(),
 				getString(R.string.graph_title)) {
-			private List<Integer> value_y = new ArrayList<Integer>();
-			private List<Integer> value_x = new ArrayList<Integer>();
-
 			// use only integer labels and adapt the horizontal labels with nice
 			// readable day strings like "today", "yesterday", "7 days before"
 			@Override
 			protected String formatLabel(double value, boolean isValueX) {
 				int valueInt = (int) value;
-				if (!isValueX && !value_y.contains(valueInt)) {
-					value_y.add(valueInt);
+				if (!isValueX) {
+					Log.v("graph", "y " + valueInt);
 					return "" + (valueInt);
-				} else if (isValueX && !value_x.contains(valueInt)) {
+				} else if (isValueX) {
 					// adapt x labels to show how many days ago this was
-					value_x.add(valueInt);
 					int days_ago = (int) (x_value_biggest - valueInt);
 					if (days_ago == 0)
 						return getString(R.string.today);
@@ -150,8 +185,9 @@ public class TrackerFragment extends Fragment {
 					else
 						return getResources().getQuantityString(
 								R.plurals.days_ago, days_ago, days_ago);
-				} else
+				} else {
 					return "";
+				}
 			}
 		};
 		// add all series to the GraphView object
@@ -159,7 +195,14 @@ public class TrackerFragment extends Fragment {
 			graphView.addSeries(series);
 		}
 
-		// set default graph parameters
+		// limit viewport to 1 month
+		if (x_value_biggest > TrackerFragment.viewPortMaxDays)
+			graphView.setViewPort(x_value_biggest
+					- TrackerFragment.viewPortMaxDays,
+					TrackerFragment.viewPortMaxDays);
+		// default style paramaters
+		graphView.setScalable(true);
+		graphView.setScrollable(true);
 		graphView.setShowLegend(true);
 		graphView.setLegendAlign(LegendAlign.BOTTOM);
 
@@ -169,8 +212,102 @@ public class TrackerFragment extends Fragment {
 		graphStyle.setHorizontalLabelsColor(Color.BLACK);
 		graphView.setGraphViewStyle(graphStyle);
 
-		// add the GraphView to the layout and return it
+		// add the GraphView to its layout
+		LinearLayout layout = (LinearLayout) rootView
+				.findViewById(R.id.tracker_graph_holder);
 		layout.addView(graphView);
-		return rootView;
+	}
+
+	private class TrackAddDialog extends DialogFragment {
+		@SuppressLint("InflateParams")
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			super.onCreateDialog(savedInstanceState);
+			setRetainInstance(true);
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			LayoutInflater inflater = getActivity().getLayoutInflater();
+			final View view = inflater.inflate(R.layout.dialog_track_add, null);
+
+			builder.setView(view);
+
+			builder.setTitle(R.string.tracker_add_title)
+					// ok button handling
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									// get all user inputs
+									EditText input_track_name = (EditText) view
+											.findViewById(R.id.track_name);
+									EditText input_track_value = (EditText) view
+											.findViewById(R.id.track_value);
+									DatePicker input_track_date = (DatePicker) view
+											.findViewById(R.id.track_date);
+
+									// read user input
+									String track_name = input_track_name
+											.getText().toString().trim();
+									String track_value = input_track_value
+											.getText().toString().trim();
+
+									// check inputs (.isEquals is API level 9,
+									// we are targeting level 8 here)
+									if (track_name.equals("")) {
+										Toast.makeText(
+												getActivity()
+														.getApplicationContext(),
+												R.string.med_reminder_add_name_required,
+												Toast.LENGTH_SHORT).show();
+										return;
+									}
+									if (track_value.equals("")) {
+										Toast.makeText(
+												getActivity()
+														.getApplicationContext(),
+												R.string.med_reminder_add_dose_required,
+												Toast.LENGTH_SHORT).show();
+										return;
+									}
+
+									// parse value from string
+									int track_value_int = 0;
+									try {
+										track_value_int = Integer
+												.parseInt(track_value);
+									} catch (NumberFormatException e) {
+										Log.w("TrackAddDialog:PositiveButton",
+												"can't parse int from string "
+														+ track_value);
+									}
+
+									// create new tracker element
+									Calendar calendar = Calendar.getInstance();
+									calendar.set(input_track_date.getYear(),
+											input_track_date.getMonth(),
+											input_track_date.getDayOfMonth());
+									TrackerEntity trackerEntity = new TrackerEntity(
+											"med", track_name, track_value_int,
+											null, calendar);
+
+									// add to list and save to DB
+									entities.add(trackerEntity);
+									trackerEntity.save();
+
+									// refresh graph
+									if (graphView != null) {
+										((ViewGroup) graphView.getParent())
+												.removeView(graphView);
+										graphView = null;
+									}
+									initGraphView();
+								}
+							})
+					// cancel button handling
+					.setNegativeButton(android.R.string.cancel,
+							new MedReminderFragment.DummyOnClickListener());
+			// create the AlertDialog object and return it
+			return builder.create();
+		}
 	}
 }

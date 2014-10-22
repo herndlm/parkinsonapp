@@ -98,7 +98,7 @@ public class MedReminderAddEditDialog extends DialogFragment {
 								try {
 									med_dose_int = Integer.parseInt(med_dose);
 								} catch (NumberFormatException e) {
-									Log.w("MedReminderAddDialog:PositiveButton",
+									Log.w("MedReminderAddEditDialog:PositiveButton",
 											"can't parse int from string "
 													+ med_dose);
 								}

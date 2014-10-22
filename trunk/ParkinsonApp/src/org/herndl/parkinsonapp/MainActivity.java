@@ -1,5 +1,8 @@
 package org.herndl.parkinsonapp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.herndl.parkinsonapp.maps.MapFragment;
 import org.herndl.parkinsonapp.med.MedReminderFragment;
 import org.herndl.parkinsonapp.track.TrackerFragment;
@@ -32,7 +35,7 @@ public class MainActivity extends ActionBarActivity implements
 	// pager which holds the main fragments
 	AppSectionsPagerAdapter fragmentPager;
 	// viewpager for swipe navigation
-	private ViewPager viewPager;
+	private CustomViewPager viewPager;
 	// taskhandler binds to the notification service to set and unset alarms
 	private TaskHandler taskHandler;
 
@@ -57,7 +60,11 @@ public class MainActivity extends ActionBarActivity implements
 		actionBar.setHomeButtonEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		// attach the fragment adapter to the view pager and listen for changes
-		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager = (CustomViewPager) findViewById(R.id.pager);
+		List<Integer> swipeDisabledPages = new ArrayList<Integer>();
+		// disable swipe for the tracker fragment with the GraphView
+		swipeDisabledPages.add(2);
+		viewPager.setSwipeDisabledPages(swipeDisabledPages);
 		viewPager.setAdapter(fragmentPager);
 		// change tab according to swipe action in viewer
 		viewPager
@@ -90,7 +97,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	// fragment pager adapter which returns the fragments and their titles
-	public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+	public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 
 		private Context context;
 
@@ -141,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	// helper function to show a simple about dialog
 	private void showAbout() {
-		View messageView = getLayoutInflater().inflate(R.layout.about,
+		View messageView = getLayoutInflater().inflate(R.layout.dialog_about,
 				(ViewGroup) findViewById(R.id.about_layout), false);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setIcon(R.drawable.ic_launcher);
