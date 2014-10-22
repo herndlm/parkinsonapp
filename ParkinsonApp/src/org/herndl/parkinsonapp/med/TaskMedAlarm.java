@@ -19,7 +19,6 @@ public class TaskMedAlarm implements Runnable {
 	private MedReminderEntity med;
 
 	public TaskMedAlarm(Context context, MedReminderEntity med) {
-		Log.v("TaskMedAlarm", "constructor");
 		this.context = context;
 		TaskMedAlarm.alarmMgr = (AlarmManager) context
 				.getSystemService(Context.ALARM_SERVICE);
@@ -52,7 +51,7 @@ public class TaskMedAlarm implements Runnable {
 				PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
-	// helper methode which gets the corresponding Calendar object to an med
+	// helper method which gets the corresponding Calendar object to an med
 	// reminder object
 	public static Calendar getCalendar(MedReminderEntity med) {
 		Calendar calendar = Calendar.getInstance();
@@ -66,7 +65,7 @@ public class TaskMedAlarm implements Runnable {
 		return calendar;
 	}
 
-	// helper methode which cancels an already set notification alarm by
+	// helper method which cancels an already set notification alarm by
 	// creating the same intent as before from the med reminder object
 	public static void cancel(Context context, MedReminderEntity med) {
 		alarmMgr.cancel(createMedPendingIntent(context, med));
