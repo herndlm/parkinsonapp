@@ -49,6 +49,8 @@ public class MapFragment extends SupportMapFragment implements
 		Log.v("CustomMapFragment", "callbackMapMarkerGetterWCANLAGEOGD");
 
 		for (MarkerOptions marker : markerOptions) {
+			Log.v("CustomMapFragment:callbackMapMarkerGetterWCANLAGEOGD",
+					"addMarker" + marker);
 			map.addMarker(marker);
 		}
 	}
