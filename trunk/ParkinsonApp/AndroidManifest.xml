@@ -3,12 +3,12 @@
     package="org.herndl.parkinsonapp"
     android:versionCode="1"
     android:versionName="1.0" >
-    
-    <uses-feature
-    	android:glEsVersion="0x00020000"
-    	android:required="true" />
 
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -49,21 +49,20 @@
         <meta-data
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="org.herndl.parkinson" />
-        
+
         <service android:name=".TaskService" />
         <service android:name=".TaskNotifyService" />
         <receiver android:name=".TaskBootService"
                 android:enabled="true">
                 android:exported="true"
             <intent-filter>
-           		<action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-        
+
         <meta-data
         	android:name="com.google.android.maps.v2.API_KEY"
         	android:value="AIzaSyAfnylHlYMyzMBU1MIYKwfNgDON6g-epic" />
-        
-    </application>
 
+    </application>
 </manifest>
